@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.giit.www.college.dao.StudentDao">
+    <resultMap id="student_map" type="Student">
+        <id property="studentId" column="student_id"/>
+        <result property="studentName" column="student_name"/>
+        <result property="idCard" column="id_card"/>
+        <result property="year" column="year"/>
+        <result property="className" column="class_name"/>
+        <result property="telephoneNumber" column="telephone_number"/>
+        <result property="student_origin_base" column="studentOriginBase"/>
+        <result property="gender" column="gender"/>
+        <result property="picPath" column="pic_path"/>
+    </resultMap>
+    <select id="findAll" resultMap="student_map">
+        SELECT * FROM student
+    </select>
+
+    <insert id="add" parameterType="Student">
+        INSERT INTO student
+        (
+        student_id,student_name,id_card,year,class_name,
+        telephone_number,student_origin_base,gender,pic_path
+        )
+        VALUES
+        (
+        #{studentId},
+        #{studentName},
+        #{idCard},
+        #{year},
+        #{className},
+        #{telephoneNumber},
+        #{studentOriginBase},
+        #{gender},
+        #{picPath})
+    </insert>
+    <delete id="delete" parameterType="int">
+        DELETE FROM student WHERE student_id = #{value}
+    </delete>
+
+    <update id="update" parameterType="Student">
+        UPDATE student
+        SET student_name = #{studentName},id_card = #{IdCard},
+        year = #{year},class_name = #{className},telephone_number = #{telephoneNumber},
+        student_origin_base = #{studentOriginBase},gender = #{gender},photo = #{photo}
+        WHERE student_id = #{studentId}
+    </update>
+
+</mapper>

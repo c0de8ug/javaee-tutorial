@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.giit.www.college.dao.BookDao">
+
+    <insert id="add" parameterType="Book">
+        INSERT INTO book(book_title,isbn,date_of_printing,author,press,category,unit_price)
+        VALUES(#{bookTitle},#{isbn},#{dateOfPrinting},#{author},#{press},#{category},#{unitPrice})
+    </insert>
+
+    <select id="find" parameterType="map" resultType="Book">
+        SELECT * FROM book WHERE book_title = #{bookTitle} AND isbn = #{isbn}
+    </select>
+
+    <delete id="delete" parameterType="map">
+        DELETE FROM book WHERE book_title = #{bookTitle} AND isbn = #{isbn}
+    </delete>
+</mapper>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.giit.www.college.dao.OrderBookDao">
+
+    <resultMap id="orderBookReviewVo_map" type="OrderBookReviewVo">
+        <result property="secId" column="sec_id"/>
+        <result property="speciality" column="speciality"/>
+        <result property="courseTitle" column="course_title"/>
+        <result property="bookTitle" column="book_title"/>
+        <result property="isbn" column="isbn"/>
+        <result property="dateOfPrinting" column="date_of_printing"/>
+        <result property="author" column="author"/>
+        <result property="category" column="category"/>
+        <result property="unitPrice" column="unitPrice"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <resultMap id="addedBookInfo_map" type="AddedBookVo">
+        <result property="secId" column="sec_id"/>
+        <result property="courseTitle" column="course_title"/>
+        <collection property="bookInfoList" ofType="BookInfo">
+            <result property="bookTitle" column="book_title"/>
+            <result property="isbn" column="isbn"/>
+            <result property="dataOfPrinting" column="data_of_printing"/>
+            <result property="author" column="author"/>
+            <result property="press" column="press"/>
+            <result property="category" column="category"/>
+            <result property="unitPrice" column="unit_price"/>
+            <result property="remark" column="remark"/>
+        </collection>
+    </resultMap>
+
+    <resultMap id="reviewedBookVo_map" type="ReviewedBookVo">
+        <result property="bookTitle" column="book_title"/>
+        <result property="isbn" column="isbn"/>
+        <result property="dateOfPrinting" column="date_of_printing"/>
+        <result property="author" column="author"/>
+        <result property="press" column="press"/>
+        <result property="count" column="count"/>
+    </resultMap>
+
+    <insert id="add" parameterType="OrderBook">
+        INSERT INTO order_book(staff_id,sec_id,book_title,isbn,remark,approval) VALUES(#{staffId},#{secId},#{bookTitle},#{isbn},#{remark},#{approval})
+    </insert>
+
+    <select id="findAddedBookInfoList" parameterType="String" resultMap="addedBookInfo_map">
+        SELECT section.sec_id,section.course_title,book.isbn,book.book_title,date_of_printing,author,press,category,unit_price,remark
+                FROM order_book
+                INNER JOIN book ON order_book.book_title = book.book_title AND order_book.isbn = book.isbn
+                INNER JOIN section ON order_book.sec_id = section.sec_id
+                WHERE order_book.staff_id = #{value}
+    </select>
+
+    <select id="usedByOtherSec" parameterType="map" resultType="int">
+        SELECT count(*) FROM order_book WHERE book_title = #{bookTitle} AND isbn = #{isbn} AND sec_id != #{secId}
+    </select>
+
+    <select id="findAllNotReviewedBook" resultMap="orderBookReviewVo_map">
+        SELECT section.sec_id,speciality,course.course_title,book.isbn,book.book_title,
+        date_of_printing,author,press,category,unit_price,remark
+        FROM order_book
+        INNER JOIN book ON order_book.isbn = book.isbn AND order_book.book_title = book.book_title
+        INNER JOIN section ON order_book.sec_id = section.sec_id
+        INNER JOIN course ON section.course_title = course.course_title
+        WHERE approval = 0
+    </select>
+
+    <select id="findAllReviewedBook" resultMap="reviewedBookVo_map">
+        SELECT book.isbn,book.book_title,
+        date_of_printing,author,press,category,
+        (SELECT count(student_id) FROM takes WHERE order_book.sec_id = takes.sec_id) AS count
+        FROM order_book
+        INNER JOIN book ON order_book.isbn = book.isbn AND order_book.book_title = book.book_title
+        WHERE approval = 1
+    </select>
+
+
+    <delete id="delete" parameterType="map">
+        DELETE FROM order_book WHERE sec_id = #{secId} AND book_title = #{bookTitle} AND isbn = #{isbn}
+    </delete>
+
+    <update id="audit" parameterType="map">
+        UPDATE order_book SET approval = 1 WHERE sec_id = #{secId} AND book_title = #{bookTitle} AND isbn=#{isbn}
+    </update>
+</mapper>

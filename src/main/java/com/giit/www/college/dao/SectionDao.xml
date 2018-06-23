@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.giit.www.college.dao.SectionDao">
+
+    <resultMap id="sec_map" type="Section">
+        <result property="secId" column="sec_id"/>
+        <result property="courseTitle" column="course_title"/>
+        <result property="year" column="year"/>
+        <result property="staffId" column="staff_id"/>
+    </resultMap>
+
+    <resultMap id="sec_custom_map" type="SectionCustom" extends="sec_map">
+        <result property="teacher" column="staff_name"/>
+        <collection property="timetableList" ofType="Timetable">
+            <result property="time" column="time"/>
+            <result property="week" column="week"/>
+            <result property="weeks" column="weeks"/>
+            <result property="classroom" column="classroom"/>
+        </collection>
+    </resultMap>
+
+    <select id="findSelectedSection" parameterType="map" resultMap="sec_map">
+        SELECT sec_id,course_title FROM section WHERE staff_id = #{staffId} AND year = #{year}
+    </select>
+
+    <select id="findAll" resultMap="sec_map">
+        SELECT * FROM section
+    </select>
+
+    <select id="findAllCustom" resultMap="sec_custom_map">
+        SELECT section.sec_id,course_title,year,staff_name,time,week,weeks,classroom FROM section
+        INNER JOIN staff ON section.staff_id = staff.staff_id
+        LEFT JOIN timetable ON section.sec_id = timetable.sec_id
+    </select>
+
+    <insert id="add" parameterType="Section">
+        INSERT INTO section(course_title,year,staff_id) VALUES(#{courseTitle},#{year},#{staffId})
+    </insert>
+
+    <delete id="delete" parameterType="int">
+        DELETE FROM section WHERE sec_id = #{value}
+    </delete>
+</mapper>

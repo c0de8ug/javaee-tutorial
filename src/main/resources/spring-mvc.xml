@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!--<mvc:interceptors>-->
+    <!--<mvc:interceptor>-->
+    <!--<mvc:mapping path="/**"/>-->
+    <!--<bean class="com.giit.www.system.interceptor.LoginIntercepter"/>-->
+    <!--</mvc:interceptor>-->
+    <!--</mvc:interceptors>-->
+    <context:component-scan base-package="com.giit.www">
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service"/>
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Repository"/>
+    </context:component-scan>
+
+    <!--自动注册基于注解风格的DefaultAnnotationHandlerMapping和AnotationMethodHandlerAdapter-->
+    <!--此处使用conversionService为了自从注册HttpMessageConverter支持@RequestBody和@ResponseBody-->
+    <mvc:annotation-driven conversion-service="conversionService"/>
+
+    <!--用于解析@RequestBody-->
+    <bean id="conversionService"
+          class="org.springframework.format.support.FormattingConversionServiceFactoryBean"></bean>
+
+    <!--视图解析器-->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/view/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+
+    <!--多部分解析器,用于解析文件上传时context-type为-->
+    <!--Content-Type:multipart/form-data; boundary=...的情况-->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize" value="5242880"/>
+    </bean>
+
+    <!--第二种处理静态资源的方式-->
+    <!--<mvc:default-servlet-handler/>-->
+
+    <!--第三种静态资源映射-->
+    <!--<mvc:resources mapping="/static/**" location="/WEB-INF/static/"/>-->
+
+    <import resource="classpath:spring-mvc-shiro.xml"/>
+
+</beans>

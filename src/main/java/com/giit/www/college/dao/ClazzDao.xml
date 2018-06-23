@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.giit.www.college.dao.ClazzDao">
+
+    <resultMap id="clazz_map" type="Clazz">
+        <id property="clazzId" column="class_id"/>
+        <result property="clazzName" column="class_name"/>
+        <result property="year" column="year"/>
+        <result property="specName" column="spec_name"/>
+    </resultMap>
+
+    <select id="findAll" resultMap="clazz_map">
+        SELECT * FROM class
+    </select>
+
+    <insert id="add" parameterType="Clazz">
+        INSERT INTO class(class_id,class_name,year,spec_name) VALUES (#{clazzId},#{className},#{year},#{specName})
+    </insert>
+
+    <delete id="delete" parameterType="int">
+        DELETE FROM class WHERE class_id = #{value}
+    </delete>
+
+    <select id="getClassCount" parameterType="map" resultType="int">
+        SELECT count(class_id) FROM class WHERE spec_name = #{specName} AND year = #{year}
+    </select>
+</mapper>

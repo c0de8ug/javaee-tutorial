@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.giit.www.college.dao.SpecDao">
+
+    <resultMap id="spec_map" type="Spec">
+        <id property="deptId" column="dept_id"/>
+        <result property="deptName" column="dept_name"/>
+    </resultMap>
+
+
+    <resultMap id="dept_spec" type="DeptAndSpec">
+        <result property="deptName" column="dept_name"/>
+        <collection property="specName" ofType="String">
+            <result property="specName" column="spec_name"/>
+        </collection>
+    </resultMap>
+
+    <select id="findDeptAndSpec" resultMap="dept_spec">
+        SELECT dept_name,spec_name FROM speciality
+    </select>
+
+    <select id="findAll" resultMap="spec_map">
+        SELECT * FROM speciality
+    </select>
+
+    <select id="findAllSpecName" resultType="String">
+        SELECT spec_name FROM speciality
+    </select>
+
+    <select id="findIdByName" parameterType="String" resultType="String">
+        SELECT spec_id FROM speciality WHERE spec_name = #{value}
+    </select>
+
+    <update id="update" parameterType="map">
+        UPDATE speciality SET spec_name = #{newSpecName} WHERE spec_name = #{specName}
+    </update>
+
+    <insert id="add" parameterType="Spec">
+        INSERT INTO speciality(dept_name,spec_name) VALUES(#{deptName},#{specName})
+    </insert>
+
+    <delete id="delete" parameterType="String">
+        DELETE FROM speciality WHERE spec_name = #{value}
+    </delete>
+</mapper>

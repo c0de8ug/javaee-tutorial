@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.giit.www.college.dao.TakesDao">
+
+    <select id="getStdCountInSection" parameterType="int" resultType="int">
+        SELECT count(student_id) FROM takes WHERE sec_id = #{value}
+    </select>
+
+    <insert id="add" parameterType="map">
+        INSERT INTO takes(student_id,sec_Id) VALUES(#{stdId},#{secId})
+    </insert>
+
+    <delete id="delete" parameterType="map">
+        DELETE FROM takes WHERE student_id = #{stdId} AND sec_id = #{secId}
+    </delete>
+</mapper>

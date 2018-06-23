@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.giit.www.college.dao.DeptDao">
+
+    <resultMap id="dept_map" type="Dept">
+        <id property="deptId" column="dept_id"/>
+        <result property="deptName" column="dept_name"/>
+    </resultMap>
+
+
+    <select id="findAll" resultMap="dept_map">
+        SELECT * FROM department
+    </select>
+
+    <select id="findAllDeptName" resultType="String">
+        SELECT dept_name FROM department
+    </select>
+
+    <select id="findById" parameterType="int" resultMap="dept_map">
+        SELECT * FROM department WHERE dept_id = #{value}
+    </select>
+
+    <select id="findIdByName" parameterType="String" resultType="String">
+        SELECT dept_id FROM department WHERE dept_name = #{value}
+    </select>
+    <update id="update" parameterType="Dept">
+        UPDATE department SET dept_name = #{deptName} WHERE dept_id = #{deptId}
+    </update>
+
+    <insert id="add" parameterType="String">
+        INSERT INTO department(dept_name) VALUES(#{value})
+    </insert>
+
+    <delete id="delete" parameterType="int">
+        DELETE FROM department WHERE dept_id = #{value}
+    </delete>
+</mapper>

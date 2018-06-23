@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.giit.www.college.dao.TimetableDao">
+
+    <insert id="add" parameterType="Timetable">
+        INSERT INTO timetable(sec_id,time,week,weeks,classroom) VALUES(#{secId},#{time},#{week},#{weeks},#{classroom})
+    </insert>
+
+    <delete id="delete" parameterType="int">
+        DELETE FROM timetable WHERE sec_id = #{value}
+    </delete>
+</mapper>

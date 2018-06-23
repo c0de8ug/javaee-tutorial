@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.giit.www.college.dao.CourseDao">
+
+    <resultMap id="course_map" type="Course">
+        <result property="courseTitle" column="course_title"></result>
+        <result property="type" column="type"></result>
+        <result property="speciality" column="speciality"></result>
+        <result property="credits" column="credits"></result>
+    </resultMap>
+
+    <select id="findAll" resultMap="course_map">
+                SELECT * FROM course
+    </select>
+
+    <select id="add" parameterType="Course">
+        INSERT INTO course(course_title,type,credits,speciality) VALUES(#{courseTitle},#{type},#{credits},#{speciality})
+    </select>
+
+    <delete id="delete" parameterType="String">
+        DELETE FROM course WHERE course_title=#{value}
+    </delete>
+
+    <select id="findAllCourseTitle" resultType="String">
+        SELECT course_title FROM course
+    </select>
+</mapper>

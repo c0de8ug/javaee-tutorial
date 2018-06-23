@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.giit.www.system.dao.UserDao">
+
+    <resultMap id="user_map" type="User">
+        <id property="userId" column="user_id"/>
+        <result property="password" column="password"/>
+        <result property="salt" column="salt"/>
+        <result property="roleIdsStr" column="role_ids"/>
+    </resultMap>
+    <!--TODO 有严重的问题,这里要换成自增的id,把user表增加一个id字段,和username-->
+    <select id="findAll" resultMap="user_map">
+        SELECT * FROM user WHERE user_id != 'admin'
+    </select>
+
+    <select id="findById" parameterType="String" resultMap="user_map">
+        SELECT * FROM user WHERE user_id = #{value}
+    </select>
+
+    <update id="update" parameterType="User">
+        UPDATE user SET password = #{password} ,authority = #{authority} WHERE user_id = #{userId}
+    </update>
+
+    <update id="updatePassword" parameterType="map">
+        UPDATE user SET password = #{password} WHERE user_id = #{userId}
+    </update>
+
+    <insert id="add" parameterType="User">
+        INSERT INTO user(user_id,password,salt,role_ids,locked) VALUES(#{userId},#{password},#{salt},#{roleIdsStr},#{locked})
+    </insert>
+
+    <select id="findByIdAndPassword" parameterType="map" resultMap="user_map">
+        SELECT * FROM user WHERE user_id = #{id} AND password = #{password}
+    </select>
+
+    <delete id="delete" parameterType="String">
+        DELETE FROM user WHERE user_id = #{value}
+    </delete>
+
+
+</mapper>

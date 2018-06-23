@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.giit.www.college.dao.StaffDao">
+
+    <resultMap id="staff_map" type="Staff">
+        <result property="staffId" column="staff_id"/>
+        <result property="staffName" column="staff_name"/>
+    </resultMap>
+
+    <select id="findAllName" resultType="String">
+        SELECT staff_name FROM staff
+    </select>
+
+    <select id="findAll" resultMap="staff_map">
+        SELECT * FROM staff
+    </select>
+
+    <select id="findIdByName" resultType="String">
+        SELECT staff_id FROM staff WHERE staff_id = #{value}
+    </select>
+
+    <update id="update" parameterType="map">
+        UPDATE staff SET spec_name = #{newSpecName} WHERE spec_name = #{specName}
+    </update>
+
+    <insert id="add" parameterType="Staff">
+        INSERT INTO staff(staff_id,staff_name) VALUES(#{staffId},#{staffName})
+    </insert>
+
+    <delete id="delete" parameterType="String">
+        DELETE FROM staff WHERE staff_id = #{value}
+    </delete>
+</mapper>
