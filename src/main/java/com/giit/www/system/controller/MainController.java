@@ -1,5 +1,7 @@
 package com.giit.www.system.controller;
 
+import org.apache.shiro.crypto.hash.SimpleHash;
+import org.apache.shiro.util.ByteSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -25,5 +27,15 @@ public class MainController {
     @RequestMapping("teacher")
     public String teacherMainView() {
         return "/teacher/main";
+    }
+
+    public static void main(String[] args) {
+        String hashAlgorithmName = "MD5";
+        Object credential = "123456";
+        Object salt = ByteSource.Util.bytes("user");
+
+
+        Object result = new SimpleHash(hashAlgorithmName,credential,salt,1);
+        System.out.println(result);
     }
 }
