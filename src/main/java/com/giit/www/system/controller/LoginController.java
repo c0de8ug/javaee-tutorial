@@ -7,9 +7,11 @@ import com.giit.www.system.service.UserBiz;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
+import org.apache.shiro.authc.UsernamePasswordToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.annotation.Resource;
 import javax.security.auth.Subject;
@@ -26,8 +28,10 @@ public class LoginController {
     UserBiz userBiz;
 
     @RequestMapping("login")
-    public String login(HttpServletRequest req, Model model, HttpSession session) {
-        String exceptionClassName = (String) req.getAttribute("shiroLoginFailure");
+    public String login(@RequestParam("username") String username, @RequestParam("password") String password) {
+
+        /*String exceptionClassName = (String) req.getAttribute("shiroLoginFailure");
+        System.out.println(exceptionClassName);
         String error = null;
         if (UnknownAccountException.class.getName().equals(exceptionClassName)) {
             error = "用户名/密码错误";
@@ -35,15 +39,26 @@ public class LoginController {
             error = "用户名/密码错误";
         } else if (exceptionClassName != null) {
             error = "其他错误：" + exceptionClassName;
-        }
+        }*/
 
         //TODO 这里以后可以把角色更换成资源控制后动态生成页面,（-->这里有疑问-->是不是可以使用自定义角色？shiro张开涛的16章有个自定义标签扫描出的角色）
         org.apache.shiro.subject.Subject subject = SecurityUtils.getSubject();
+        UsernamePasswordToken token = new UsernamePasswordToken(username, password);
+        try {
+            subject.login(token);
+        } catch(IncorrectCredentialsException e) {
+            e.printStackTrace();
+            return "redirect:login.jsp";
+        } catch(Exception e) {
+            e.printStackTrace();
+            return "redirect:login.jsp";
+        }
+
         boolean isAuthenticated = subject.isAuthenticated();
 
         if (isAuthenticated) {
             String principal = (String) subject.getPrincipal();
-            session.setAttribute("username", principal);
+            //session.setAttribute("username", principal);
 
             switch (principal) {
                 case "admin":
