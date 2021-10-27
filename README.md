@@ -76,5 +76,5 @@ Json: Gson
 ![image](https://pic3.zhimg.com/v2-3ff2f0da17e8609f85da3b61671cf0de_b.png)
 
 # 数据库表结构:
-![image](http://7xi78h.com1.z0.glb.clouddn.com/db.png)
+![image](https://user-images.githubusercontent.com/40494925/139150830-03dbbff5-0f56-4e74-be79-7b996b990c45.png)
 
